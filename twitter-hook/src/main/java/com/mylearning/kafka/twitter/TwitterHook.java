@@ -1,4 +1,4 @@
-package com.mylearning.kafka.sessiontwo;
+package com.mylearning.kafka.twitter;
 
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
@@ -23,16 +23,16 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public class TwitterProducer {
+public class TwitterHook {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(TwitterProducer.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(TwitterHook.class);
     private final String consumerKey = "";
     private final String consumerSecret = "";
     private final String token = "";
     private final String tokenSecret = "";
 
     public static void main(String[] args) {
-        new TwitterProducer().readTweets();
+        new TwitterHook().readTweets();
     }
 
     public void readTweets() {

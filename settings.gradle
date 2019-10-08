@@ -8,7 +8,7 @@
  */
 
 include 'twitter-consumer'
-
+include 'twitter-hook'
 rootProject.name = 'kafka-learning'
 
-project(':twitter-consumer').name = 'twitter-consumer'
+
