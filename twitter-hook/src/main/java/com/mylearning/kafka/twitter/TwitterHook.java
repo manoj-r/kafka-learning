@@ -10,9 +10,7 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class TwitterHook {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TwitterHook.class);
+    //Create a twitter developer account, app in twitter and generate your token
     private final String consumerKey = "";
     private final String consumerSecret = "";
     private final String token = "";
@@ -39,7 +38,8 @@ public class TwitterHook {
         //Set twitter client
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(1000);
-        Client hosebirdClient = createTwitterClient(msgQueue);
+        List<String> twitterTerms = Lists.newArrayList("bitcoin");
+        Client hosebirdClient = createTwitterClient(msgQueue, twitterTerms);
         // Attempts to establish a connection.
         hosebirdClient.connect();
 
@@ -57,7 +57,13 @@ public class TwitterHook {
             }
             if (msg != null){
                 LOGGER.info(msg);
-                producer.send(new ProducerRecord<>("twitter_tweets", null, msg));
+                producer.send(new ProducerRecord<>("twitter_tweets", null, msg), new Callback() {
+                    @Override
+                    public void onCompletion(RecordMetadata metadata, Exception exception) {
+                        if (null != exception)
+                            LOGGER.error("Error producing to Kafka ", exception);
+                    }
+                });
             }
         }
 
@@ -70,14 +76,14 @@ public class TwitterHook {
     }
 
 
-    private Client createTwitterClient(BlockingQueue<String> msgQueue) {
+    private Client createTwitterClient(BlockingQueue<String> msgQueue, List<String> twitterTerms) {
         /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
         // Optional: set up some followings and track terms
-        List<String> terms = Lists.newArrayList("bitcoin");
-        hosebirdEndpoint.trackTerms(terms);
+        //List<String> twitterTerms = Lists.newArrayList("bitcoin");
+        hosebirdEndpoint.trackTerms(twitterTerms);
 
         // These secrets should be read from a config file
         Authentication hosebirdAuth = new OAuth1(consumerKey, consumerSecret, token, tokenSecret);
@@ -98,6 +104,13 @@ public class TwitterHook {
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
+        // Advance properties
+//        properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+//        properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
+//        properties.setProperty(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
+//        properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
+//        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
+
         return new KafkaProducer(properties);
 
     }

@@ -7,8 +7,7 @@
  * in the user manual at https://docs.gradle.org/5.5.1/userguide/multi_project_builds.html
  */
 
-include 'twitter-consumer'
 include 'twitter-hook'
 rootProject.name = 'kafka-learning'
-
+include 'twitter-consumer'
 
