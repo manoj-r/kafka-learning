@@ -38,7 +38,7 @@ public class TwitterHook {
         //Set twitter client
         /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(1000);
-        List<String> twitterTerms = Lists.newArrayList("bitcoin");
+        List<String> twitterTerms = Lists.newArrayList("bitcoin", "soccer", "football");
         Client hosebirdClient = createTwitterClient(msgQueue, twitterTerms);
         // Attempts to establish a connection.
         hosebirdClient.connect();
@@ -109,8 +109,10 @@ public class TwitterHook {
 //        properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
 //        properties.setProperty(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
 //        properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
+        //High throughput
 //        properties.setProperty(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
-
+//        properties.setProperty(ProducerConfig.LINGER_MS_CONFIG, "20");
+//        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(32 * 1024));
         return new KafkaProducer(properties);
 
     }
