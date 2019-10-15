@@ -50,6 +50,12 @@ A repository for all learning and tutorials on Kafka.
     ```shell script
     kafka-consumer-groups --bootstrap-server 127.0.0.1:9092 --list
     ```
+  
+* Reset Offsets
+
+    ```shell script
+    kafka-consumer-groups --bootstrap-server 127.0.0.1:9092 --group elasticsearch-consumer-group --reset-offsets --topic twitter_tweets --execute --to-earliest
+    ```  
 
 # References
 
