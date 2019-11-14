@@ -1,5 +1,5 @@
 # kafka-learning
-A repository for all learning and tutorials on Kafka.
+A repository for all learning and tutorials on Kafka using reference materials from Stephen Mareek.
 
 
 # Project
@@ -59,6 +59,8 @@ A repository for all learning and tutorials on Kafka.
 
 # References
 
+* https://github.com/simplesteph
+
 * https://developer.twitter.com/en/docs/tweets/filter-realtime/overview
 
 * https://github.com/twitter/hbc
@@ -66,3 +68,5 @@ A repository for all learning and tutorials on Kafka.
 * https://medium.com/@Ankitthakur/apache-kafka-installation-on-mac-using-homebrew-a367cdefd273
 
 * https://kafka.apache.org/documentation
+
+
