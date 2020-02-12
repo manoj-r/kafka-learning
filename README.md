@@ -69,4 +69,5 @@ A repository for all learning and tutorials on Kafka using reference materials f
 
 * https://kafka.apache.org/documentation
 
+* Kafka Stream topic types: https://kafka.apache.org/24/documentation/streams/developer-guide/manage-topics.html
 
